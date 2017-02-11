@@ -1,0 +1,62 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD rominfo.o
+LOAD rominfos.o
+
+.glue_7         0x0000000000000000        0x0
+ .glue_7        0x0000000000000000        0x0 linker stubs
+
+.glue_7t        0x0000000000000000        0x0
+ .glue_7t       0x0000000000000000        0x0 linker stubs
+
+.vfp11_veneer   0x0000000000000000        0x0
+ .vfp11_veneer  0x0000000000000000        0x0 linker stubs
+
+.v4_bx          0x0000000000000000        0x0
+ .v4_bx         0x0000000000000000        0x0 linker stubs
+
+.text           0x0000000000000000        0x0
+ .text          0x0000000000000000        0x0 rominfo.o
+ .text          0x0000000000000000        0x0 rominfos.o
+
+.iplt           0x0000000000000000        0x0
+ .iplt          0x0000000000000000        0x0 rominfo.o
+
+.rel.dyn        0x0000000000000000        0x0
+ .rel.iplt      0x0000000000000000        0x0 rominfo.o
+
+.data           0x0000000000040000       0x1c
+ *(.data)
+ .data          0x0000000000040000       0x10 rominfo.o
+                0x0000000000040000                rominfo_top
+ .data          0x0000000000040010        0xc rominfos.o
+                0x0000000000040010                rominfo3
+                0x0000000000040014                rominfo2
+                0x0000000000040018                rominfo1
+OUTPUT(rominfo elf32-littlearm)
+
+.igot.plt       0x000000000004001c        0x0
+ .igot.plt      0x000000000004001c        0x0 rominfo.o
+
+.bss            0x000000000004001c        0x4
+ .bss           0x000000000004001c        0x0 rominfo.o
+ .bss           0x000000000004001c        0x4 rominfos.o
+                0x000000000004001c                rominfo0
+
+.comment        0x0000000000000000       0x1d
+ .comment       0x0000000000000000       0x1d rominfo.o
+                                         0x1e (size before relaxing)
+ .comment       0x000000000000001d       0x1e rominfos.o
+
+.ARM.attributes
+                0x0000000000000000       0x2f
+ .ARM.attributes
+                0x0000000000000000       0x2f rominfo.o
+ .ARM.attributes
+                0x000000000000002f       0x2f rominfos.o

@@ -1,0 +1,436 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+uart_lock           0x4               cpu.o
+smp_tsk_alc_map     0x4               init.o
+rxhead              0x4               interrupt.o
+smp_tcb_head        0x200             init.o
+sys_struct_info5    0x20              sysconfs.o
+sys_struct_info4    0x20              sysconfs.o
+smp_queue_lock      0x4               init.o
+sys_struct_info2    0x20              sysconfs.o
+sys_struct_info3    0x20              sysconfs.o
+sys_struct_info1    0x20              sysconfs.o
+sys_struct_info0    0x20              sysconfs.o
+rxtail              0x4               interrupt.o
+rxbuffer            0x1000            interrupt.o
+sys_struct_info6    0x20              sysconfs.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ROM              0x0000000000008000 0x000000000000a000 axwl
+SYSINFO          0x0000000000040000 0x0000000000000400 axwl
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD boot.o
+LOAD cpu.o
+LOAD dispatcher.o
+LOAD experiment.o
+LOAD init.o
+LOAD interrupt.o
+LOAD main.o
+LOAD memory.o
+LOAD mmu.o
+LOAD multicore.o
+LOAD psr.o
+LOAD smp_kernel.o
+LOAD sysconfs.o
+LOAD sysinfo.o
+LOAD task.o
+LOAD uart.o
+LOAD util.o
+                0x0000000000008000                . = 0x8000
+
+.text.boot      0x0000000000008000        0x0
+ *(.text.boot)
+ .text.boot     0x0000000000008000        0x0 boot.o
+                0x0000000000008000                . = ALIGN (0x4)
+
+.text           0x0000000000008000     0x3000
+                0x0000000000008000                . = ALIGN (0x1000)
+ *(.text)
+ .text          0x0000000000008000      0x40c boot.o
+                0x0000000000008000                _start
+                0x00000000000080ec                _secondary_start
+                0x0000000000008184                _irq
+                0x0000000000008198                _dabort
+                0x00000000000081b4                _svc_handler
+                0x00000000000081c8                _get_hvbadr
+                0x00000000000081d4                _get_vbadr
+                0x00000000000081e0                _get_stack_pointer
+                0x00000000000081ec                _get_cpsr
+                0x00000000000081f8                _get_prid
+                0x0000000000008204                _get_mpidr
+                0x000000000000820c                _get_hsctlr
+                0x0000000000008214                _get_sctlr
+                0x000000000000821c                _get_num_cpus
+                0x000000000000822c                _is_smp
+                0x0000000000008238                _set_smp
+                0x0000000000008248                _enable_interrupts
+                0x0000000000008258                DataMemoryBarrierAll
+                0x0000000000008274                MemoryBarrier
+                0x0000000000008288                dummy
+                0x000000000000828c                _start1
+                0x000000000000829c                _start2
+                0x00000000000082ac                _start3
+                0x00000000000082bc                read32
+                0x00000000000082c4                write32
+                0x00000000000082cc                _inc_cores
+                0x000000000000830c                _spin_req
+                0x000000000000832c                _spin_rel
+                0x0000000000008350                _get_tlbtr
+                0x0000000000008358                _get_mmfr0
+                0x0000000000008360                _get_mmfr1
+                0x0000000000008368                _get_mmfr2
+                0x0000000000008370                _get_mmfr3
+                0x0000000000008378                _get_isar4
+                0x0000000000008380                _change_pc
+                0x0000000000008384                _get_dacr
+                0x000000000000838c                _get_pfr1
+                0x0000000000008394                _get_contextidr
+                0x000000000000839c                invalidate_data_cache_l10_only
+ .text          0x000000000000840c       0xa8 cpu.o
+                0x000000000000840c                get_prid
+                0x0000000000008418                spin_req
+                0x000000000000843c                spin_rel
+                0x0000000000008460                get_waking_cores
+                0x0000000000008488                inc_waking_cores
+ .text          0x00000000000084b4        0x0 dispatcher.o
+ .text          0x00000000000084b4       0xd8 experiment.o
+                0x00000000000084b4                check_address
+                0x00000000000084e8                output_access_policy
+                0x000000000000854c                output_all_pm_access_policy
+ .text          0x000000000000858c      0x2b0 init.o
+                0x000000000000858c                init_ttbs
+                0x000000000000868c                init_smp_kernel
+                0x000000000000873c                sys_init_primary
+                0x00000000000087c4                sys_init_secondary
+                0x0000000000008838                init_amp_kernel
+ .text          0x000000000000883c      0x4d0 interrupt.o
+                0x000000000000883c                aux_int_handler
+                0x000000000000887c                init_irq_handler
+                0x0000000000008894                enable_irq
+                0x00000000000088e0                disable_irq
+                0x000000000000892c                send_irq
+                0x0000000000008944                call_irq_handler
+                0x00000000000089ac                _interrupt_handler
+                0x0000000000008a58                interrupt_handler
+                0x0000000000008a6c                reset_vector
+                0x0000000000008aa4                undefined_instruction_vector
+                0x0000000000008ad8                software_interrupt_handler
+                0x0000000000008b1c                prefetch_abort_vector
+                0x0000000000008b50                data_abort_vector
+                0x0000000000008d08                fast_interrupt_vector
+ .text          0x0000000000008d0c       0xc0 main.o
+                0x0000000000008d0c                busy_wait
+                0x0000000000008d44                other
+ .text          0x0000000000008dcc        0x0 memory.o
+ .text          0x0000000000008dcc      0x830 mmu.o
+                0x0000000000008dcc                init_mmu
+                0x0000000000008e30                is_mmu_enabled
+                0x0000000000008e40                get_ttbr0
+                0x0000000000008e48                get_ttbr1
+                0x0000000000008e50                get_ttba0
+                0x0000000000008e60                get_ttba1
+                0x0000000000008e70                mmu_section
+                0x0000000000008e94                mmu_fault
+                0x0000000000008eb0                cre_usr_tbl
+                0x0000000000008f70                stop_mmu
+                0x0000000000008f94                invalidate_caches
+                0x0000000000008fb4                invalidate_tlbs
+                0x0000000000008fc4                invalidate_all_tlbs
+                0x0000000000008fd0                sync_ttba_change
+                0x000000000000907c                start_mmu
+                0x00000000000090bc                sync_ttba_change_no_lock
+                0x0000000000009170                start_mmu_no_lock
+                0x0000000000009218                sync_user_ttba_change
+                0x00000000000092c0                amp_tbl_setup
+                0x0000000000009430                smp_tbl_setup
+                0x00000000000095d8                set_asid
+ .text          0x00000000000095fc      0x260 multicore.o
+                0x00000000000095fc                start_secondary_core
+                0x0000000000009758                ipi_handler
+                0x0000000000009788                send_ipi
+                0x00000000000097a0                local_int_handler
+ .text          0x000000000000985c       0x14 psr.o
+                0x000000000000985c                get_cpsr
+                0x0000000000009868                get_cpsr_m
+ .text          0x0000000000009870        0x4 smp_kernel.o
+                0x0000000000009870                smp_kernel
+ .text          0x0000000000009874        0x0 sysconfs.o
+ .text          0x0000000000009874      0x5e0 sysinfo.o
+                0x0000000000009874                init_sysinfos
+                0x0000000000009918                is_valid_pm
+                0x0000000000009a50                is_valid_cpuid
+                0x0000000000009a60                is_smp
+                0x0000000000009a74                is_amp
+                0x0000000000009a88                get_sys_struct_info
+                0x0000000000009aa0                get_pm
+                0x0000000000009ab0                get_prev_pm
+                0x0000000000009ac0                get_ttba
+                0x0000000000009adc                get_kernel_ram_bottom
+                0x0000000000009b04                get_kernel_ram_limit
+                0x0000000000009b2c                get_kernel_ram_area
+                0x0000000000009b4c                get_user_ram_bottom
+                0x0000000000009b74                get_user_ram_limit
+                0x0000000000009b9c                get_user_ram_area
+                0x0000000000009bbc                get_kernel_heap_bottom
+                0x0000000000009be4                get_kernel_heap_limit
+                0x0000000000009c0c                get_kernel_heap_area
+                0x0000000000009c2c                get_kernel_heap_free_head
+                0x0000000000009c4c                take_kernel_asid
+                0x0000000000009c8c                set_user_asid
+                0x0000000000009df8                change_pm
+ .text          0x0000000000009e54      0x4d8 task.o
+                0x0000000000009e54                create_task
+                0x0000000000009f18                start_task
+                0x0000000000009fc8                end_task
+                0x0000000000009ff8                destroy_task
+                0x000000000000a0a8                destroy_core_tasks
+                0x000000000000a138                move_task_space
+                0x000000000000a254                move_task_spaces
+ .text          0x000000000000a32c      0x314 uart.o
+                0x000000000000a354                uart_lcr
+                0x000000000000a364                uart_recv
+                0x000000000000a384                uart_check
+                0x000000000000a398                uart_send
+                0x000000000000a3c4                uart_puts
+                0x000000000000a434                hexstring
+                0x000000000000a4f8                register_value_puts
+                0x000000000000a528                uart_flush
+                0x000000000000a540                mini_uart_init
+                0x000000000000a610                timer_init
+                0x000000000000a630                timer_tick
+ .text          0x000000000000a640      0x1f0 util.o
+                0x000000000000a640                heap_init
+                0x000000000000a660                memset
+                0x000000000000a684                memcpy
+                0x000000000000a6a8                _malloc
+                0x000000000000a728                kmalloc
+                0x000000000000a784                _free
+                0x000000000000a808                kfree
+                0x000000000000b000                . = ALIGN (0x1000)
+ *fill*         0x000000000000a830      0x7d0 
+
+.glue_7         0x000000000000b000        0x0
+ .glue_7        0x000000000000b000        0x0 linker stubs
+
+.glue_7t        0x000000000000b000        0x0
+ .glue_7t       0x000000000000b000        0x0 linker stubs
+
+.vfp11_veneer   0x000000000000b000        0x0
+ .vfp11_veneer  0x000000000000b000        0x0 linker stubs
+
+.v4_bx          0x000000000000b000        0x0
+ .v4_bx         0x000000000000b000        0x0 linker stubs
+
+.iplt           0x000000000000b000        0x0
+ .iplt          0x000000000000b000        0x0 boot.o
+
+.text.startup   0x000000000000b000       0x38
+ .text.startup  0x000000000000b000       0x38 main.o
+                0x000000000000b000                main
+
+.rodata         0x000000000000b038      0x5bc
+                0x000000000000b038                . = ALIGN (0x1)
+ *(.rodata*)
+ .rodata.str1.4
+                0x000000000000b038       0x24 cpu.o
+ .rodata.str1.4
+                0x000000000000b05c       0x44 experiment.o
+                                         0x4c (size before relaxing)
+ .rodata        0x000000000000b0a0        0xc init.o
+ .rodata.str1.4
+                0x000000000000b0ac      0x332 interrupt.o
+                                        0x336 (size before relaxing)
+ *fill*         0x000000000000b3de        0x2 
+ .rodata.str1.4
+                0x000000000000b3e0       0x3f main.o
+ *fill*         0x000000000000b41f        0x1 
+ .rodata.str1.4
+                0x000000000000b420       0x79 mmu.o
+                                         0x81 (size before relaxing)
+ *fill*         0x000000000000b499        0x3 
+ .rodata.str1.4
+                0x000000000000b49c       0x51 multicore.o
+ *fill*         0x000000000000b4ed        0x3 
+ .rodata.str1.4
+                0x000000000000b4f0      0x104 sysinfo.o
+                                        0x109 (size before relaxing)
+                0x000000000000b5f4                . = ALIGN (0x1)
+
+.rel.dyn        0x000000000000b5f4        0x0
+ .rel.iplt      0x000000000000b5f4        0x0 boot.o
+
+.data           0x000000000000b5f4     0x1a0c
+                0x000000000000c000                . = ALIGN (0x1000)
+ *fill*         0x000000000000b5f4      0xa0c 
+ *(EXCLUDE_FILE(sysinfo.o) .data)
+ .data          0x000000000000c000        0x0 boot.o
+ .data          0x000000000000c000        0x0 cpu.o
+ .data          0x000000000000c000        0x0 dispatcher.o
+ .data          0x000000000000c000        0x0 experiment.o
+ .data          0x000000000000c000        0x0 init.o
+ .data          0x000000000000c000        0x0 interrupt.o
+ .data          0x000000000000c000        0x0 main.o
+ .data          0x000000000000c000        0x0 memory.o
+ .data          0x000000000000c000        0x0 mmu.o
+ .data          0x000000000000c000        0x0 multicore.o
+ .data          0x000000000000c000        0x0 psr.o
+ .data          0x000000000000c000        0x0 smp_kernel.o
+ .data          0x000000000000c000      0x184 sysconfs.o
+                0x000000000000c000                sys_struct_info_top
+                0x000000000000c01c                asid_areas
+                0x000000000000c038                asid_area6
+                0x000000000000c040                asid_area5
+                0x000000000000c048                asid_area4
+                0x000000000000c050                asid_area3
+                0x000000000000c058                asid_area2
+                0x000000000000c060                asid_area1
+                0x000000000000c068                asid_area0
+                0x000000000000c070                kheap_areas
+                0x000000000000c08c                uram_areas
+                0x000000000000c0a8                kram_areas
+                0x000000000000c0c4                uram_area6
+                0x000000000000c0cc                kheap_area6
+                0x000000000000c0d4                kram_area6
+                0x000000000000c0dc                uram_area5
+                0x000000000000c0e4                kheap_area5
+                0x000000000000c0ec                kram_area5
+                0x000000000000c0f4                uram_area4
+                0x000000000000c0fc                kheap_area4
+                0x000000000000c104                kram_area4
+                0x000000000000c10c                uram_area3
+                0x000000000000c114                kheap_area3
+                0x000000000000c11c                kram_area3
+                0x000000000000c124                uram_area2
+                0x000000000000c12c                kheap_area2
+                0x000000000000c134                kram_area2
+                0x000000000000c13c                uram_area1
+                0x000000000000c144                kheap_area1
+                0x000000000000c14c                kram_area1
+                0x000000000000c154                uram_area0
+                0x000000000000c15c                kheap_area0
+                0x000000000000c164                kram_area0
+                0x000000000000c16c                sys_common_info
+ .data          0x000000000000c184        0x0 task.o
+ .data          0x000000000000c184        0x0 uart.o
+ .data          0x000000000000c184        0x0 util.o
+                0x000000000000d000                . = ALIGN (0x1000)
+ *fill*         0x000000000000c184      0xe7c 
+
+.igot.plt       0x000000000000d000        0x0
+ .igot.plt      0x000000000000d000        0x0 boot.o
+
+.bss            0x000000000000d000     0x22f4
+                0x000000000000d000                . = ALIGN (0x1000)
+                0x000000000000d000                __bss_start = .
+ *(.bss)
+ .bss           0x000000000000d000        0x0 boot.o
+ .bss           0x000000000000d000        0x0 cpu.o
+ .bss           0x000000000000d000        0x0 dispatcher.o
+ .bss           0x000000000000d000        0x4 experiment.o
+ .bss           0x000000000000d004        0x0 init.o
+ .bss           0x000000000000d004      0x120 interrupt.o
+ .bss           0x000000000000d124        0x4 main.o
+                0x000000000000d124                __init_status
+ .bss           0x000000000000d128        0x0 memory.o
+ .bss           0x000000000000d128        0x0 mmu.o
+ .bss           0x000000000000d128        0x0 multicore.o
+ .bss           0x000000000000d128        0x0 psr.o
+ .bss           0x000000000000d128        0x0 smp_kernel.o
+ .bss           0x000000000000d128      0x400 sysconfs.o
+                0x000000000000d128                asid_head
+ .bss           0x000000000000d528        0x0 sysinfo.o
+ .bss           0x000000000000d528        0x0 task.o
+ .bss           0x000000000000d528        0x0 uart.o
+ .bss           0x000000000000d528        0x0 util.o
+                0x000000000000e000                . = ALIGN (0x1000)
+ *fill*         0x000000000000d528      0xad8 
+                0x000000000000e000                __bss_end = .
+ COMMON         0x000000000000e000        0x4 cpu.o
+                0x000000000000e000                uart_lock
+ COMMON         0x000000000000e004      0x208 init.o
+                0x000000000000e004                smp_tsk_alc_map
+                0x000000000000e008                smp_tcb_head
+                0x000000000000e208                smp_queue_lock
+ COMMON         0x000000000000e20c     0x1008 interrupt.o
+                0x000000000000e20c                rxhead
+                0x000000000000e210                rxtail
+                0x000000000000e214                rxbuffer
+ COMMON         0x000000000000f214       0xe0 sysconfs.o
+                0x000000000000f214                sys_struct_info5
+                0x000000000000f234                sys_struct_info4
+                0x000000000000f254                sys_struct_info2
+                0x000000000000f274                sys_struct_info3
+                0x000000000000f294                sys_struct_info1
+                0x000000000000f2b4                sys_struct_info0
+                0x000000000000f2d4                sys_struct_info6
+
+.sysinfo        0x0000000000040000        0x8
+ sysinfo.o(.data)
+ .data          0x0000000000040000        0x0 sysinfo.o
+ sysinfo.o(.data.*)
+ .sysinfo       0x0000000000040000        0x8 sysinfo.o
+                0x0000000000040000                sysinfo
+OUTPUT(kernel.elf elf32-littlearm)
+
+.ARM.attributes
+                0x0000000000000000       0x37
+ .ARM.attributes
+                0x0000000000000000       0x29 boot.o
+ .ARM.attributes
+                0x0000000000000029       0x2f cpu.o
+ .ARM.attributes
+                0x0000000000000058       0x2f dispatcher.o
+ .ARM.attributes
+                0x0000000000000087       0x2f experiment.o
+ .ARM.attributes
+                0x00000000000000b6       0x2f init.o
+ .ARM.attributes
+                0x00000000000000e5       0x2f interrupt.o
+ .ARM.attributes
+                0x0000000000000114       0x2f main.o
+ .ARM.attributes
+                0x0000000000000143       0x2f memory.o
+ .ARM.attributes
+                0x0000000000000172       0x2f mmu.o
+ .ARM.attributes
+                0x00000000000001a1       0x2f multicore.o
+ .ARM.attributes
+                0x00000000000001d0       0x2f psr.o
+ .ARM.attributes
+                0x00000000000001ff       0x2f smp_kernel.o
+ .ARM.attributes
+                0x000000000000022e       0x2f sysconfs.o
+ .ARM.attributes
+                0x000000000000025d       0x2f sysinfo.o
+ .ARM.attributes
+                0x000000000000028c       0x2f task.o
+ .ARM.attributes
+                0x00000000000002bb       0x2f uart.o
+ .ARM.attributes
+                0x00000000000002ea       0x2f util.o
+
+.comment        0x0000000000000000       0x1d
+ .comment       0x0000000000000000       0x1d cpu.o
+                                         0x1e (size before relaxing)
+ .comment       0x000000000000001d       0x1e dispatcher.o
+ .comment       0x000000000000001d       0x1e experiment.o
+ .comment       0x000000000000001d       0x1e init.o
+ .comment       0x000000000000001d       0x1e interrupt.o
+ .comment       0x000000000000001d       0x1e main.o
+ .comment       0x000000000000001d       0x1e memory.o
+ .comment       0x000000000000001d       0x1e mmu.o
+ .comment       0x000000000000001d       0x1e multicore.o
+ .comment       0x000000000000001d       0x1e psr.o
+ .comment       0x000000000000001d       0x1e smp_kernel.o
+ .comment       0x000000000000001d       0x1e sysconfs.o
+ .comment       0x000000000000001d       0x1e sysinfo.o
+ .comment       0x000000000000001d       0x1e task.o
+ .comment       0x000000000000001d       0x1e uart.o
+ .comment       0x000000000000001d       0x1e util.o

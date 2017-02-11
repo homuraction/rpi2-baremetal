@@ -1,0 +1,54 @@
+ENTRY(_start)
+
+MEMORY {
+  ROM (wxai) : ORIGIN = 0x8000, LENGTH = 40k
+  SYSINFO (wxai) : ORIGIN = 0x40000, LENGTH = 1k
+}
+
+SECTIONS
+{
+    /* Starts at LOADER_ADDR. */
+    . = 0x8000;
+    .text.boot :
+    {
+        KEEP(*(.text.boot))
+        . = ALIGN(4);
+    } > ROM
+
+    .text :
+    {
+        . = ALIGN(4096);
+        *(.text)
+        . = ALIGN(4096);
+    } > ROM
+
+    .rodata :
+    {
+        . = ALIGN(1);
+        *(.rodata*)
+        . = ALIGN(1);
+    } > ROM
+
+    .data :
+    {
+        . = ALIGN(4096);
+        *(EXCLUDE_FILE (sysinfo.o).data)
+        . = ALIGN(4096);
+    } > ROM
+
+    .bss :
+    {
+        . = ALIGN(4096);
+        __bss_start = .;
+        *(.bss)
+        . = ALIGN(4096);
+        __bss_end = .;
+    } > ROM
+
+    .sysinfo :
+    {
+      sysinfo.o(.data)
+      sysinfo.o(.data.*)
+    } > SYSINFO
+}
+
