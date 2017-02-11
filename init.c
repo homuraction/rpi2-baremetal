@@ -91,7 +91,7 @@ void init_ttbs(void)
                         amp_tbl_setup(ttba,
                                       get_kernel_ram_area(i, amp_pm),
                                       get_user_ram_area(i, amp_pm),
-                                      get_kernel_heap_area(i-NUM_CPU, smp_pm[i-NUM_CPU]),
+                                      get_kernel_heap_area(i, amp_pm),
                                       SP_BASE + (SECTION_SIZE*i));
                 } else {
                         smp_tbl_setup(ttba,
