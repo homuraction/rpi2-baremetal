@@ -15,6 +15,7 @@
 
 #define SCTLR_MMU_OPTION  \
         (MMU_ENABLE     | \
+         ACHECK_ENABLE  | \
          ICACHE_ENABLE  | \
          DCACHE_ENABLE  | \
          PREDICT_ENABLE | \
